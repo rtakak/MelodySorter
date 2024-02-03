@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 import spotipy
 import spotipy.oauth2 as oauth2
-from commands import SPOTIPY_CLIENT_SECRET, SPOTIPY_CLIENT_ID, SPOTIPY_REDIRECT_URI, LFM_API_KEY
+from clientSecrets import SPOTIPY_CLIENT_SECRET, SPOTIPY_CLIENT_ID, SPOTIPY_REDIRECT_URI, LFM_API_KEY
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from spotipy.oauth2 import SpotifyOAuth
@@ -165,8 +165,7 @@ def get_genre(artist, track, spotify_id, artists_id, n):
 def get_playlist_tracks_w_genres(n=2):
     input_flag = True
     while input_flag:
-        # inp = input("Liked Songs (0) or a different Playlist (1)? \t(0/1): ")
-        inp = '0'
+        inp = input("Liked Songs (0) or a different Playlist (1)? \t(0/1): ")
         if inp in ['0', '1']:
             print("\nRetrieving all the tracks...")
             if inp == '0':
@@ -319,11 +318,10 @@ def main():
     # print(json.dumps(tracks, indent=4))
     genre404.sort(reverse=True)
     tracks_genre404 = [tracks.pop(i) for i in genre404]
-    add_all_flag = True
+    add_all_flag = False
     input_flag = True
     while input_flag:
-        # inp = input("\nHow many sub playlists would you like to be generated? \t(Type auto or a number) :")
-        inp = "10"
+        inp = input("\nHow many sub playlists would you like to be generated? \t(Type auto or a number) :")
         inp = inp.lower()
         if inp == "auto":
             break
@@ -360,18 +358,26 @@ def main():
 
     new_labels = [centroids_genre[i] for i in kmeans_fit.labels_]
 
-    # scatter_plot(tracks, kmeans_fit.labels_, new_labels)
+    while input_flag:
+        inp = input("\nWould you like see the graph?\t:")
+        inp = inp.lower()
+        if inp in ["y", "yes", "1"]:
+            scatter_plot(tracks, kmeans_fit.labels_, new_labels)
+            break
+        elif inp in ["n", "no", "0"]:
+            break
+        else:
+            print("Yes, Y or No, N")
 
     menu = True
     print(f"There are {len(new_playlists)} generated playlists.\n")
-    f = open("output.txt", "w", encoding="utf-8")
+    #f = open("output.txt", "w", encoding="utf-8")
+    f = None
     print(f"There are {len(new_playlists)} generated playlists.\n", file=f)
     for playlist_label, playlist in zip(centroids_genre, new_playlists):
         print(f"----------------------\n{playlist_label}: ", file=f)
         for track in playlist:
             print(f"\t{track["name"]} -{track["artists"]}", file=f)
-
-        input_flag = False
 
         if add_all_flag:
             input_flag = False
@@ -383,11 +389,11 @@ def main():
             if inp in ["y", "yes", "1"]:
                 add_playlist_to_library(playlist_label, playlist)
             elif inp in ["n", "no", "0"]:
-                input_flag = False
                 break
             else:
                 print("Yes, Y or No, N")
-    f.close()
+    if f is not None:
+        f.close()
 
 
 def add_playlist_to_library(playlist_name, playlist):

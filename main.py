@@ -371,7 +371,7 @@ def main():
 
     menu = True
     print(f"There are {len(new_playlists)} generated playlists.\n")
-    #f = open("output.txt", "w", encoding="utf-8")
+    # f = open("output.txt", "w", encoding="utf-8")
     f = None
     print(f"There are {len(new_playlists)} generated playlists.\n", file=f)
     for playlist_label, playlist in zip(centroids_genre, new_playlists):

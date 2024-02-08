@@ -1,0 +1,86 @@
+{
+  "resources": [
+    {
+      "name": "genre-attributes",
+      "path": "genre_attrs.csv",
+      "dialect": {                
+        "delimiter": ",",
+        "doubleQuote": true
+      },
+      "profile": "tabular-data-resource",
+      "schema": {
+        "fields": [
+          {
+            "name": "genre",
+            "type": "string",
+            "format": "default",
+            "title": "Genre",
+            "description": "The name of the genre, a mostly comprehensive subset of the full Spotify genre list"
+          },
+          {
+            "name": "x",
+            "type": "integer",
+            "format": "default",
+            "title": "X",
+            "description": "Low values of x denote heavier genres (e.g. metal) whilst higher values are for lighter genres (e.g. pop)"
+          },
+          {
+            "name": "y",
+            "type": "integer",
+            "format": "default",
+            "title": "Y",
+            "description": "Low values of y denote more organic genres (e.g. classical) whilst higher values are for more mechanical genres (e.g. techno)"
+          },
+          {
+            "name": "hex_colour",
+            "type": "string",
+            "format": "default",
+            "title": "Colour"
+          }
+        ]
+      }
+    }
+  ],
+    "views": [
+        {
+            "name": "genre-map",
+            "title": "Genre Map",
+            "resources": ["genre-attributes"],
+            "specType": "vega-lite",
+            "spec": {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "description": "A scatterplot showing the Spotify genre space",
+                "data": {"name": "genre-attributes"},
+                "mark": "point",
+                "encoding": {
+                    "x": {"field": "x", "type": "quantitative"},
+                    "y": {"field": "y", "type": "quantitative"},
+                    "tooltip": {"field": "genre", "type": "nominal"}
+                }
+            }
+        }
+    ],
+    "keywords": [
+        "everynoise",
+        "spotify",
+        "music",
+        "genres"
+    ],
+    "licenses": [
+        {
+        "name": "CC-BY-SA-4.0",
+            "title": "Creative Commons Attribution Share-Alike 4.0",
+            "path": "https://creativecommons.org/licenses/by-sa/4.0/"
+        }
+    ],
+    "contributors": [
+        {
+            "title": "Ayrton Bourn",
+            "role": "author"
+        }
+    ],
+    "description": "The Every Noise dataset expresses Spotify genres across 3 dimensions, primarily heavy/light and organic/mechanic, with a third 'undefined' colour dimension. Glenn McDonald (Senior Software Engineer at Spotify) is the creator of EveryNoise, the dataset contained in this repository has been derived from his work.",
+    "homepage": "https://github.com/AyrtonB/EveryNoise-Watch#readme",
+    "title": "Every Noise",
+    "name": "every-noise"
+}
